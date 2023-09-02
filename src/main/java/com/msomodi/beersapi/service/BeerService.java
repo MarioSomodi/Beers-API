@@ -4,13 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.msomodi.beersapi.entity.Beer;
 import com.msomodi.beersapi.repository.BeerRepository;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 @Service
 public class BeerService {
