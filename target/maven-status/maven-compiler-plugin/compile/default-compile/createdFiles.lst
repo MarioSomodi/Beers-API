@@ -1,0 +1,11 @@
+com\msomodi\beersapi\controller\BeerController.class
+com\msomodi\beersapi\ContentTypeOptionsFilter.class
+com\msomodi\beersapi\entity\Beer.class
+com\msomodi\beersapi\BeersApiApplication.class
+com\msomodi\beersapi\ExternalConfig.class
+com\msomodi\beersapi\service\BeerService.class
+com\msomodi\beersapi\ActiveMQConfig.class
+com\msomodi\beersapi\FilterConfig.class
+com\msomodi\beersapi\CustomActiveMQConnectionFactory.class
+com\msomodi\beersapi\BeerApiException.class
+com\msomodi\beersapi\repository\BeerRepository.class

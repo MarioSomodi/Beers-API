@@ -1,5 +1,6 @@
 package com.msomodi.beersapi.controller;
 
+import com.msomodi.beersapi.BeerApiException;
 import com.msomodi.beersapi.entity.Beer;
 import com.msomodi.beersapi.service.BeerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class BeerController {
         jmsTemplate.convertAndSend("Saving new beer to database: " + beer.getName());
         try {
             return new ResponseEntity<>(service.saveBeer(beer), HttpStatus.OK);
-        } catch(Exception ex){
+        } catch(BeerApiException ex){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -33,7 +34,7 @@ public class BeerController {
         jmsTemplate.convertAndSend("Saving new beers to database");
         try {
             return new ResponseEntity<>(service.saveBeers(beers), HttpStatus.OK);
-        }catch(Exception ex){
+        }catch(BeerApiException ex){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -60,7 +61,7 @@ public class BeerController {
         jmsTemplate.convertAndSend("Updating beer with id " + beer.getId());
         try {
             return new ResponseEntity<>(service.updateBeer(beer),HttpStatus.OK);
-        }catch(Exception ex){
+        }catch(BeerApiException ex){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

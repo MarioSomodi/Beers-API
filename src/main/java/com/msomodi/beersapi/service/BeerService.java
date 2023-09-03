@@ -2,6 +2,7 @@ package com.msomodi.beersapi.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.msomodi.beersapi.BeerApiException;
 import com.msomodi.beersapi.entity.Beer;
 import com.msomodi.beersapi.repository.BeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,13 @@ public class BeerService {
     @Autowired
     private BeerRepository repository;
 
+    public static final String INVALID_DATA = "Invalid beer data";
+
     private final ObjectMapper objectMapper = new ObjectMapper();
     public Beer saveBeer(Beer beer) {
         //Validate input, so we do not get buffer overflow if user tried to send enormous amounts of data
         if (!isValidBeer(beer)) {
-            throw new IllegalArgumentException("Invalid beer data");
+            throw new BeerApiException(INVALID_DATA);
         }
         try {
             //Read beer object as json and back as class and escape the invalid characters solves Cross Site Scripting Weakness (Persistent in JSON Response)
@@ -29,7 +32,7 @@ public class BeerService {
             Beer cleanedBeer = objectMapper.readValue(json, Beer.class);
             return repository.save(cleanedBeer);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error serializing Beer object to JSON");
+            throw new BeerApiException("Error serializing Beer object to JSON");
         }
     }
 
@@ -40,7 +43,7 @@ public class BeerService {
             for (int i = 0; i < beers.size(); i++) {
                 //Validate input, so we do not get buffer overflow if user tried to send enormous amounts of data
                 if (!isValidBeer(beers.get(i))) {
-                    throw new IllegalArgumentException("Invalid beer data");
+                    throw new BeerApiException(INVALID_DATA);
                 }
                 //Read beer object as json and back as class and escape the invalid characters solves Cross Site Scripting Weakness (Persistent in JSON Response)
                 //ex. will not allow <script>alert(1);</script> because it will escape the "<>" characters
@@ -51,7 +54,7 @@ public class BeerService {
             }
             return repository.saveAll(beers);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error serializing Beer objects to JSON");
+            throw new BeerApiException("Error serializing Beer objects to JSON");
         }
     }
 
@@ -76,7 +79,7 @@ public class BeerService {
     public Beer updateBeer(Beer beer) {
         //Validate input, so we do not get buffer overflow if user tried to send enormous amounts of data
         if (!isValidBeer(beer)) {
-            throw new IllegalArgumentException("Invalid beer data");
+            throw new BeerApiException(INVALID_DATA);
         }
         try {
             //Check if beer exists
@@ -94,10 +97,10 @@ public class BeerService {
                 existingBeer.setAlcoholPercentage(cleanedBeer.getAlcoholPercentage());
                 return repository.save(existingBeer);
             }else {
-                throw new IllegalArgumentException("Beer not found for ID: " + beer.getId());
+                throw new BeerApiException("Beer not found for ID: " + beer.getId());
             }
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error serializing Beer object to JSON");
+            throw new BeerApiException("Error serializing Beer object to JSON");
         }
     }
 
